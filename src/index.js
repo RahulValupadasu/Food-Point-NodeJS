@@ -4,6 +4,7 @@ require('./database/mongoose');
 
 const path = require('path');
 const hbs = require('hbs');
+const request = require('postman-request');
 
 const app = express();
 const port = process.env.PORT || 3000
@@ -19,6 +20,11 @@ app.set("view engine","hbs");
 app.set("views",viewsPath);
 //registering partials to hbs 
 hbs.registerPartials(partialsPath);
+//registered a helper function to format the object sent to the template differently, usually it formats the object to toString which produces us [object Object] , but by 
+//but by using helper function we are formating it by converting to object(doubt converting to string or object) using stringify
+hbs.registerHelper('json', function(context){
+    return JSON.stringify(context);
+})
 
 const aboutUsRouter = require('./routers/aboutUs');
 app.use(aboutUsRouter);
@@ -39,7 +45,14 @@ app.use(orderRouter);
 
 
 app.get('', (req,res)=>{
-   res.render('index',{});
+    const listOfItemsUrl = 'http://localhost:3000/listOfMenu';
+    request({url:listOfItemsUrl,json:true},(error,response)=>{
+        if(error){
+            console.log("error dont know why")
+        }else
+        //    console.log("menuArray",response.body);
+       res.render('index',{menuArray:response.body});
+        }); 
 });
 
 

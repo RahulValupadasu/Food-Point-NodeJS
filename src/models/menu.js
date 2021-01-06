@@ -16,7 +16,7 @@ const menuSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    inStock:{
+    quantitySelected:{
         type:Number,
         required:true
     },

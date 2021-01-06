@@ -61,12 +61,30 @@
                </div>
             </div>
          </div>
-         <section>
+         <section>  
             <div class="search-styling">
                <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search by name">
             </div>
             <h3 class="no-matches" id="no_matches">No matches found</h3>
-            <div class="item-list" id="items"></div>
+            <div class="item-list" id="items">
+               {{#each menuArray}}
+               {{!-- error in below tag --}}
+               <div class="card-individual" id="{{this._id}}_card">
+			      <div class="card-styling">
+			<img src="./images/Food_imgs/{{this.itemName}}.jpg" alt="not found" style="width:100%">
+			<h4 class="card-item-name"><b>{{this.itemName}}</b></h4>
+			<div style="display:flex;justify-content:center">
+            {{!-- here we are using triple bracktes to tell not to encode before hand and "json" helper function which we added --}}
+            {{!-- in hbs.helperfunction--}}
+			<button class="minus-button" onclick='removeFromCart({{{json this}}})'>-</button>
+			<button class="individual-count" id="{{this._id}}"></button>
+			<button class="plus-button" onclick='addToCart({{{json this}}})'>+</button>
+			      </div>
+			      </div>
+			      </div>
+              {{/each}}
+         </div>
+          
          </section>
        </main>      
        {{>footer}}

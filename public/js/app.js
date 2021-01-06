@@ -1,4 +1,10 @@
 //client side javascript
+// const request = require('postman-request');
+// const { response } = require('express');
+// const listOfItemsUrl = '/itemsOfMenu';
+// request({url:listOfItemsUrl,json:true},(error,response)=>{
+// 	console.log(response.body);
+// })
 
 
 var cards = '';
@@ -320,27 +326,27 @@ var checkPasswordLength = function (password) {
 	}
 }
 
-var initialLoadOfItems = function() {
-	for (x in listOfItems) {
+// var initialLoadOfItems = function() {
+// 	for (x in listOfItems) {
 
 
-		cards = cards + '<div class="card-individual" id="' + listOfItems[x].itemId + '_card">' +
-			'<div class="card-styling">' +
-			'<img src="./images/Food_imgs/' + listOfItems[x].imgName + '.jpg" alt="not found" style="width:100%">' +
-			'<h4 class="card-item-name"><b>' + listOfItems[x].name + '</b></h4>' +
-			'<div style="display:flex;justify-content:center">' +
-			'<button class="minus-button" onclick="removeFromCart(listOfItems[' + x + '])">-</button>' +
-			'<button class="individual-count" id="' + listOfItems[x].itemId + '"></button>' +
-			'<button class="plus-button" onclick="addToCart(listOfItems[' + x + '])">+</button>' +
-			'</div>' +
-			'</div>' +
-			'</div>'
-	}
-	if (document.getElementById("items")) {
-		document.getElementById("items").innerHTML = cards;
-	}
-	document.getElementById("lblCartCount").innerHTML = getValue();
-}
+// 		cards = cards + '<div class="card-individual" id="' + listOfItems[x].itemId + '_card">' +
+// 			'<div class="card-styling">' +
+// 			'<img src="./images/Food_imgs/' + listOfItems[x].imgName + '.jpg" alt="not found" style="width:100%">' +
+// 			'<h4 class="card-item-name"><b>' + listOfItems[x].name + '</b></h4>' +
+// 			'<div style="display:flex;justify-content:center">' +
+// 			'<button class="minus-button" onclick="removeFromCart(listOfItems[' + x + '])">-</button>' +
+// 			'<button class="individual-count" id="' + listOfItems[x].itemId + '"></button>' +
+// 			'<button class="plus-button" onclick="addToCart(listOfItems[' + x + '])">+</button>' +
+// 			'</div>' +
+// 			'</div>' +
+// 			'</div>'
+// 	}
+// 	if (document.getElementById("items")) {
+// 		document.getElementById("items").innerHTML = cards;
+// 	}
+// 	document.getElementById("lblCartCount").innerHTML = getValue();
+// }
 
 var updateAllIndividualItems=function() {
 	if (document.getElementById("items")) {
@@ -383,27 +389,28 @@ var getValue = function() {
 }
 
 var addToCart = function(item) {
+	console.log("items",item);
 	if (!localStorage.getItem("cartItems")) {
 		item.quantitySelected++;
 		cartItems.push(item)
-		document.getElementById(item.itemId).innerHTML = item.quantitySelected;
+		document.getElementById(item._id).innerHTML = item.quantitySelected;
 		localStorage.setItem("cartItems", JSON.stringify(cartItems));
 		document.getElementById("lblCartCount").innerHTML = getValue();
 	} else {
 		var newItem = true;
 		var temp = JSON.parse(localStorage.getItem("cartItems"));
 		for (var i = 0; i < temp.length; i++) {
-			if (temp[i].itemId == item.itemId) {
+			if (temp[i]._id == item._id) {
 				temp[i].quantitySelected++;
-				var itmId = item.itemId
-				document.getElementById(itmId).innerHTML = temp[i].quantitySelected;
+				var itmId = item._id
+				document.getElementById(item._id).innerHTML = temp[i].quantitySelected;
 				newItem = false;
 				break;
 			}
 		}
 		if (newItem) {
 			item.quantitySelected++;
-			document.getElementById(item.itemId).innerHTML = item.quantitySelected;
+			document.getElementById(item._id).innerHTML = item.quantitySelected;
 			temp.push(item)
 		}
 		localStorage.setItem("cartItems", JSON.stringify(temp));
@@ -415,9 +422,9 @@ var removeFromCart = function(item) {
 	if (JSON.parse(localStorage.getItem("cartItems")).length > 0) {
 		var temp = JSON.parse(localStorage.getItem("cartItems"));
 		for (var i = 0; i < temp.length; i++) {
-			if (temp[i].itemId == item.itemId && temp[i].quantitySelected > 0) {
+			if (temp[i]._id == item._id && temp[i].quantitySelected > 0) {
 				temp[i].quantitySelected--;
-				document.getElementById(temp[i].itemId).innerHTML = temp[i].quantitySelected;
+				document.getElementById(temp[i]._id).innerHTML = temp[i].quantitySelected;
 				localStorage.setItem("cartItems", JSON.stringify(temp));
 				break;
 			}
@@ -433,7 +440,7 @@ var checkLoginStatus = function() {
 	return false;
 }
 
-initialLoadOfItems();
+// initialLoadOfItems();
 
 updateAllIndividualItems();
 
